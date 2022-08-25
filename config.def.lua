@@ -22,9 +22,13 @@ return {
 
 	-- target toolchain and flags
 	target={
-		platform='x86_64-linux-musl',
+		platform='aarch64-unknown-linux-musl-gcc',
 		cflags='-Os -fPIE -pipe',
 		ldflags='-s -static-pie',
+        cc='$CC',
+        ar='$AR',
+        as='$AS',
+        ld='$LD',
 	},
 
 	-- host toolchain and flags
