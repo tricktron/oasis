@@ -21,16 +21,10 @@
                         lua
                         ninja
                         curl
-                        tzdata
+                        tzdata.out
+                        tzdata.bin
                         libarchive
                     ];
-                   shellHook = ''
-                   #     cc=$CC;
-                   #     ar=$AR;
-                   #     as=$AS;
-                   #     ld=$LD;
-                   TZ=UTC
-                   # '';
                 };
             }
         );

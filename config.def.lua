@@ -25,16 +25,22 @@ return {
 		platform='aarch64-unknown-linux-musl-gcc',
 		cflags='-Os -fPIE -pipe',
 		ldflags='-s -static-pie',
-        cc='$CC',
-        ar='$AR',
-        as='$AS',
-        ld='$LD',
+        cc='aarch64-unknown-linux-musl-gcc',
+        ar='aarch64-unknown-linux-musl-ar',
+        as='aarch64-unknown-linux-musl-as',
+        ld='aarch64-unknown-linux-musl-ld',
+        objcopy='aarch64-unknown-linux-musl-objcopy',
 	},
 
 	-- host toolchain and flags
 	host={
 		cflags='-O2 -pipe',
 		ldflags='',
+        cc='aarch64-unknown-linux-musl-gcc',
+        ar='aarch64-unknown-linux-musl-ar',
+        as='aarch64-unknown-linux-musl-as',
+        ld='aarch64-unknown-linux-musl-ld',
+        objcopy='aarch64-unknown-linux-musl-objcopy',
 	},
 
 	-- output git repository
