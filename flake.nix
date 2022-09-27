@@ -1,8 +1,9 @@
 {
     description        = "oasis-dev-shell";
     inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-22.05";
+    inputs.nixpkgs-fork.url   = "github:tricktron/nixpkgs/develop";
 
-    outputs = { self, nixpkgs }:
+    outputs = { self, nixpkgs, nixpkgs-fork }:
         let
             systems       = [ "aarch64-linux" ];
             forSystems    = f: nixpkgs.lib.genAttrs systems (system: f system);
@@ -12,7 +13,8 @@
         devShells = forSystems
         (system:
             let
-                pkgs = nixpkgs.legacyPackages.${system}.pkgsStatic;
+                pkgs      = nixpkgs.legacyPackages.${system}.pkgsStatic;
+                pkgs-fork = nixpkgs-fork.legacyPackages.${system}.pkgsStatic;
             in
             {
                 default = pkgs.mkShell 
@@ -21,12 +23,11 @@
                     [
                         bison
                         lua
-                        ninja
+                        samurai
                         curl
                         tzdata.out
                         tzdata.bin
-                        libarchive
-                    ];
+                    ] ++ [ pkgs-fork.pax ];
                 };
             }
         );
