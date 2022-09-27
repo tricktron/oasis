@@ -3,19 +3,21 @@
     inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-22.05";
 
     outputs = { self, nixpkgs }:
+        let
+            systems       = [ "aarch64-linux" ];
+            forSystems    = f: nixpkgs.lib.genAttrs systems (system: f system);
+        in
     {
-        devShells = nixpkgs.lib.genAttrs 
-        [ 
-            "aarch64-linux"
-        ] 
+
+        devShells = forSystems
         (system:
             let
-                pkgs = nixpkgs.legacyPackages.${system};
+                pkgs = nixpkgs.legacyPackages.${system}.pkgsStatic;
             in
             {
-                default = pkgs.pkgsStatic.mkShell 
+                default = pkgs.mkShell 
                 {
-                    nativeBuildInputs = with pkgs.pkgsStatic; 
+                    nativeBuildInputs = with pkgs; 
                     [
                         bison
                         lua
