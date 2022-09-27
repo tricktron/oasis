@@ -9,8 +9,7 @@ case $file in
 esac
 
 if command -v bsdtar >/dev/null; then
-	exec bsdtar --uid 501 --gid 20 -xf "$file" "$@"
-    #exec bsdtar -xf "$file" "$@"
+    exec bsdtar -xf "$file" "$@"
 elif command -v pax >/dev/null; then
 	"$tool" -d -c "$file" | pax -r "$@"
 else
