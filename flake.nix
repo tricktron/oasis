@@ -1,35 +1,39 @@
 {
-    description        = "oasis-dev-shell";
-    inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-22.05";
-    inputs.nixpkgs-fork.url   = "github:tricktron/nixpkgs/develop";
-
-    outputs = { self, nixpkgs, nixpkgs-fork }:
-        let
-            systems       = [ "aarch64-linux" ];
-            forSystems    = f: nixpkgs.lib.genAttrs systems (system: f system);
-        in
+    description             = "oasis-dev-shell";
+    nixConfig              =
     {
-
-        devShells = forSystems
-        (system:
-            let
-                pkgs      = nixpkgs.legacyPackages.${system}.pkgsStatic;
-                pkgs-fork = nixpkgs-fork.legacyPackages.${system}.pkgsStatic;
-            in
-            {
-                default = pkgs.mkShell 
-                {
-                    nativeBuildInputs = with pkgs; 
-                    [
-                        bison
-                        lua
-                        samurai
-                        curl
-                        tzdata.out
-                        tzdata.bin
-                    ] ++ [ pkgs-fork.pax ];
-                };
-            }
-        );
+        extra-sbustituters        = [ "https://tricktron.cachix.org" ];
+        extra-trusted-public-keys = 
+        [ "tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w=" ];
     };
+    inputs.nixpkgs.url      = "github:NixOS/nixpkgs/release-22.05";
+    inputs.nixpkgs-fork.url = "github:tricktron/nixpkgs/develop";
+    inputs.flake-utils.url  = "github:numtide/flake-utils";
+
+
+    outputs = { self, nixpkgs, nixpkgs-fork, flake-utils }:
+    flake-utils.lib.eachSystem [ "aarch64-linux" ]
+    (
+        system:
+        let
+            pkgs       = nixpkgs.legacyPackages.${system}.pkgsStatic;
+            pkgs-fork  = nixpkgs-fork.legacyPackages.${system}.pkgsStatic;
+            oasis-deps = with pkgs;
+            [
+                bison
+                lua
+                samurai
+                curl
+                tzdata.out
+                tzdata.bin
+                gitMinimal
+            ] ++ [ pkgs-fork.pax ];
+        in
+        {
+            devShells.default = pkgs.mkShell 
+            {
+                nativeBuildInputs = oasis-deps;
+            };
+        }
+    );
 }
