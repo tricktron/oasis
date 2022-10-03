@@ -46,7 +46,7 @@ return {
 	-- output git repository
 	repo={
 		path='$builddir/root.git',
-		flags='--bare',
+		flags='',
 		tag='tree',
 		branch='master',
 	},
