@@ -26,7 +26,6 @@
                 curl
                 tzdata.out
                 tzdata.bin
-                gitMinimal
             ] ++ [ pkgs-fork.pax ];
         in
         {
