@@ -12,12 +12,13 @@
 
 
     outputs = { self, nixpkgs, nixpkgs-fork, flake-utils }:
-    flake-utils.lib.eachSystem [ "aarch64-linux" ]
+    flake-utils.lib.eachSystem [ "aarch64-linux" "x86_64-linux" ]
     (
         system:
         let
-            pkgs       = nixpkgs.legacyPackages.${system}.pkgsStatic;
-            pkgs-fork  = nixpkgs-fork.legacyPackages.${system}.pkgsStatic;
+            pkgs       = nixpkgs.legacyPackages.${system}.pkgs;
+            pkgs-host  = pkgs.pkgsCross.aarch64-multiplatform-musl;
+            pkgs-fork  = nixpkgs-fork.legacyPackages.${system}.pkgs;
             oasis-deps = with pkgs;
             [
                 bison
@@ -26,10 +27,12 @@
                 curl
                 tzdata.out
                 tzdata.bin
+                wayland
+                nasm
             ] ++ [ pkgs-fork.pax ];
         in
         {
-            devShells.default = pkgs.mkShell 
+            devShells.default = pkgs-host.mkShell 
             {
                 nativeBuildInputs = oasis-deps;
             };

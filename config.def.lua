@@ -22,10 +22,10 @@ return {
 
 	-- target toolchain and flags
 	target={
-		platform='aarch64-unknown-linux-musl-gcc',
-		cflags='-Os -fPIE -pipe',
+		platform='aarch64-unknown-linux-musl',
+		cflags='-Os -fPIE -pipe -Wno-format-security',
 		ldflags='-s -static-pie',
-        cc='aarch64-unknown-linux-musl-gcc',
+        cc='aarch64-unknown-linux-musl-cc',
         ar='aarch64-unknown-linux-musl-ar',
         as='aarch64-unknown-linux-musl-as',
         ld='aarch64-unknown-linux-musl-ld',
@@ -36,11 +36,10 @@ return {
 	host={
 		cflags='-O2 -pipe',
 		ldflags='',
-        cc='aarch64-unknown-linux-musl-gcc',
+        cc='aarch64-unknown-linux-musl-cc',
         ar='aarch64-unknown-linux-musl-ar',
         as='aarch64-unknown-linux-musl-as',
         ld='aarch64-unknown-linux-musl-ld',
-        objcopy='aarch64-unknown-linux-musl-objcopy',
 	},
 
 	-- output git repository
@@ -52,5 +51,5 @@ return {
 	},
 
 	-- GPU driver (possible_values: amdgpu intel nouveau)
-	-- video_drivers={intel=true}
+	video_drivers={amdgpu=true}
 }
