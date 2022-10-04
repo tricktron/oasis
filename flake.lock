@@ -31,10 +31,27 @@
         "type": "github"
       }
     },
+    "nixpkgs-fork": {
+      "locked": {
+        "lastModified": 1664908380,
+        "narHash": "sha256-oti53QDpuccI+TMSkdwCH31saMmLHrXnx0fIFCg2h18=",
+        "owner": "tricktron",
+        "repo": "nixpkgs",
+        "rev": "2c86513a0c84214e7c187570829df7fd58cfd553",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tricktron",
+        "ref": "develop",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-fork": "nixpkgs-fork"
       }
     }
   },
