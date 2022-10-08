@@ -33,6 +33,19 @@
             ];
         in
         {
+            packages.oasis-kernel = (pkgs.linuxKernel.kernels.linux_zen.override
+            {
+                structuredExtraConfig = with pkgs.lib.kernel;
+                {
+                    BLK_DEV_INITRD   = yes;
+                    RD_GZIP          = yes;
+                    TMPFS            = yes;
+                    SYSFS            = yes;
+                    PROC_FS          = yes;
+                    DEVTMPFS         = yes;
+                    DEVTMPFS_MOUNT   = yes;
+                };
+            });
 	        defaultPackage    = pkgs.symlinkJoin
             {
                 name  = "oasis-live-cd";
