@@ -47,6 +47,60 @@
                     FUSE_FS          = yes;
                 };
             });
+
+            packages.oasis-qemu-kernel = (pkgs.linuxKernel.kernels.linux_5_19.override
+            {
+                structuredExtraConfig = with pkgs.lib.kernel;
+                {
+                    BLK_DEV_INITRD      = yes;
+                    RD_GZIP             = yes;
+                    "64BIT"             = yes;
+                    "9P_FS"             = yes;
+                    ACPI                = yes;
+                    BINFMT_ELF          = yes;
+                    BINFMT_SCRIPT       = yes;
+                    BLK_DEV             = yes;
+                    BLK_DEV_LOOP        = yes;
+                    DEVTMPFS            = yes;
+                    DEVTMPFS_MOUNT      = yes;
+                    HW_RANDOM           = yes;
+                    IKCONFIG            = yes;
+                    IKCONFIG_PROC       = yes;
+                    INET                = yes;
+                    IPV6                = yes;
+                    NET                 = yes;
+                    NETDEVICES          = yes;
+                    NETLINK_DIAG        = yes;
+                    NETWORK_FILESYSTEMS = yes;
+                    NET_9P              = yes;
+                    NET_CORE            = yes;
+                    PCI                 = yes;
+                    TMPFS               = yes;
+                    UNIX                = yes;
+                    
+                    EXT4_FS             = yes;
+                    FUSE_FS             = yes;
+                    
+                    HW_RANDOM_VIRTIO    = yes;
+                    NET_9P_VIRTIO       = yes;
+                    VIRTIO_BLK          = yes;
+                    VIRTIO_CONSOLE      = yes;
+                    VIRTIO_INPUT        = yes;
+                    VIRTIO_MENU         = yes;
+                    VIRTIO_NET          = yes;
+                    VIRTIO_PCI          = yes;
+
+                    AGP                 = yes;
+                    HAS_DMA             = yes; 
+                    DRM                 = yes;
+                    DRM_FBDEV_EMULATION = yes;
+                    DRM_VIRTIO_GPU      = yes;
+                    FB                  = yes;
+                    INPUT_EVDEV         = yes;
+                };
+            });
+
+
 	        defaultPackage    = pkgs.symlinkJoin
             {
                 name  = "oasis-live-cd";
