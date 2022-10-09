@@ -44,6 +44,7 @@
                     PROC_FS          = yes;
                     DEVTMPFS         = yes;
                     DEVTMPFS_MOUNT   = yes;
+                    FUSE_FS          = yes;
                 };
             });
 	        defaultPackage    = pkgs.symlinkJoin
