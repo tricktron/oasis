@@ -49,17 +49,16 @@
             });
 
             packages.oasis-qemu-kernel = 
-                let base_kernel = pkgs.linuxKernel.kernels.linux_5_15;
-                in
-                pkgs.callPackage pkgs.linuxManualConfig
-                {
-                    inherit (pkgs) lib stdenv;
-                    inherit (base_kernel) src;
-                    version = "oasis-qemu-${base_kernel.version}";
-
-                    configfile = ./oasis-qemu.config;
-                    allowImportFromDerivation = true;
-                };
+                let 
+                    base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;
+                    oasis-kernel = pkgs.linuxPackages_custom
+                    {
+                        inherit (base_kernel) src;
+                        version = "${base_kernel.version}";
+                        configfile = ./oasis-qemu.config;
+                        allowImportFromDerivation = true;
+                    };
+                in oasis-kernel.kernel;
 
             packages.oasis-qemu-kernel-old = (pkgs.linuxKernel.kernels.linux_5_19.override
             {
