@@ -12,7 +12,12 @@ return {
                 -- Each entry contains a list of packages, a list of patterns to
                 -- include, and a list of patterns to exclude. If no patterns
                 -- are specified, all files from the package are included.
-		{sets.core, exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.core,    exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.extra,   exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.devel,   exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.media,   exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.net,     exclude={'^include/', '^lib/.*%.a$'}},
+		{sets.desktop, exclude={'^include/', '^lib/.*%.a$'}},
 
 		-- You may also specify a list of patterns to include or exclude
 		-- for any packages not matching any entries. If no patterns are
