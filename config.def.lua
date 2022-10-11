@@ -22,24 +22,24 @@ return {
 
 	-- target toolchain and flags
 	target={
-		platform='aarch64-unknown-linux-musl',
+		platform='x86_64-unknown-linux-musl',
 		cflags='-Os -fPIE -pipe -Wno-format-security',
 		ldflags='-s -static-pie',
-        cc='aarch64-unknown-linux-musl-cc',
-        ar='aarch64-unknown-linux-musl-ar',
-        as='aarch64-unknown-linux-musl-as',
-        ld='aarch64-unknown-linux-musl-ld',
-        objcopy='aarch64-unknown-linux-musl-objcopy',
+        cc='x86_64-unknown-linux-musl-cc',
+        ar='x86_64-unknown-linux-musl-ar',
+        as='x86_64-unknown-linux-musl-as',
+        ld='x86_64-unknown-linux-musl-ld',
+        objcopy='x86_64-unknown-linux-musl-objcopy',
 	},
 
 	-- host toolchain and flags
 	host={
 		cflags='-O2 -pipe',
 		ldflags='',
-        cc='aarch64-unknown-linux-musl-cc',
-        ar='aarch64-unknown-linux-musl-ar',
-        as='aarch64-unknown-linux-musl-as',
-        ld='aarch64-unknown-linux-musl-ld',
+        cc='x86_64-unknown-linux-musl-cc',
+        ar='x86_64-unknown-linux-musl-ar',
+        as='x86_64-unknown-linux-musl-as',
+        ld='x86_64-unknown-linux-musl-ld',
 	},
 
 	-- output git repository

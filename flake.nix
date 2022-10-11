@@ -17,7 +17,7 @@
         system:
         let
             pkgs       = nixpkgs.legacyPackages.${system}.pkgs;
-	        pkgs-host  = pkgs.pkgsCross.aarch64-multiplatform-musl;
+	        pkgs-host  = pkgs.pkgsCross.musl64;
             pkgs-fork  = nixpkgs-fork.legacyPackages.${system}.pkgs;
             oasis-deps = with pkgs;
             [
