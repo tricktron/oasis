@@ -30,7 +30,7 @@ jobs:
         uses: cachix/cachix-action@v11
         with:
           name: tricktron
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
           extraPullNames: tricktron
 
       - name: Cache dev shell
@@ -50,7 +50,7 @@ jobs:
         run: cd out/root.git && git checkout master
       
       - name: Tar rootfs
-        run: tar -cvf rootfs-x86_64.tar out/root.git
+        run: tar -C out -cvf rootfs-x86_64.tar root.git
 
       - name: Upload rootfs artifact
         uses: actions/upload-artifact@v3
