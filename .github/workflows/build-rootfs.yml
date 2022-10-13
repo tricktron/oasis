@@ -25,6 +25,7 @@ jobs:
             substituters = https://cache.nixos.org https://tricktron.cachix.org
             trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
             allowed-users = *
+            accept-flake-config = true
       - name: Use Cachix to Pull and Push Binary Cache
         uses: cachix/cachix-action@v11
         with:
@@ -41,7 +42,9 @@ jobs:
           git config --global user.name oasis
 
       - name: Build
-        run: nix develop -c lua setup.lua && samu commit
+        run: |
+          nix develop -c lua setup.lua 
+          nix develop -c samu commit
       
       - name: Checkout master to trigger Git hook to get all files
         run: cd out/root.git && git checkout master
