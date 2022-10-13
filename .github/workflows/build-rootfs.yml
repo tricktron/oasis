@@ -1,0 +1,54 @@
+name: Build Rootfs
+
+on:
+  push:
+    branches: [ main, f-oasis-in-nix-shell ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: 2
+
+jobs:
+  build-rootfs:
+    name: Build Rootfs x86_64
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix with Flakes Support and Haskell Nix Binary Cache
+        uses: cachix/install-nix-action@v18
+      - name: Use Cachix to Pull and Push Binary Cache
+        uses: cachix/cachix-action@v10
+        with:
+          name: tricktron
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          extraPullNames: tricktron
+
+      - name: Cache Dev Shell
+        run: nix develop
+
+      - name: Setup Git User to apply patches and commit
+        run: |
+          git config --global user.email oasis
+          git config --global user.name oasis
+
+      - name: Build
+        run: nix develop -c lua setup && samu commit
+      
+      - name: Checkout master to trigger Git hook to get all files
+        run: cd out/root.git && git checkout master
+      
+      - name: Tar Rootfs
+        run: tar -cvf rootfs-x86_64.tar out/root.git
+
+      - name: Upload Artifact
+        uses: actions/upload-artifacts@v3
+        with:
+          name: rootfs-x86_64
+          path: rootfs-x86_64.tar
+
+
+
