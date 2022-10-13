@@ -45,7 +45,7 @@ jobs:
         run: tar -cvf rootfs-x86_64.tar out/root.git
 
       - name: Upload Artifact
-        uses: actions/upload-artifacts@v3
+        uses: actions/upload-artifact@v3
         with:
           name: rootfs-x86_64
           path: rootfs-x86_64.tar
