@@ -15,36 +15,41 @@ jobs:
     name: Build Rootfs x86_64
     runs-on: ubuntu-22.04
     steps:
-      - name: Clone repository
+      - name: Clone Repository
         uses: actions/checkout@v3
 
-      - name: Install Nix with Flakes Support and Haskell Nix Binary Cache
+      - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: |
+            substituters = https://cache.nixos.org https://tricktron.cachix.org
+            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+            allowed-users = *
       - name: Use Cachix to Pull and Push Binary Cache
-        uses: cachix/cachix-action@v10
+        uses: cachix/cachix-action@v11
         with:
           name: tricktron
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
           extraPullNames: tricktron
 
-      - name: Cache Dev Shell
+      - name: Cache dev shell
         run: nix develop
 
-      - name: Setup Git User to apply patches and commit
+      - name: Setup Git user to apply patches and commit
         run: |
           git config --global user.email oasis
           git config --global user.name oasis
 
       - name: Build
-        run: nix develop -c lua setup && samu commit
+        run: nix develop -c lua setup.lua && samu commit
       
       - name: Checkout master to trigger Git hook to get all files
         run: cd out/root.git && git checkout master
       
-      - name: Tar Rootfs
+      - name: Tar rootfs
         run: tar -cvf rootfs-x86_64.tar out/root.git
 
-      - name: Upload Artifact
+      - name: Upload rootfs artifact
         uses: actions/upload-artifact@v3
         with:
           name: rootfs-x86_64
