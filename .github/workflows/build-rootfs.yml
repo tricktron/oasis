@@ -17,32 +17,36 @@ jobs:
     steps  :
       - name: Clone repository
         uses: actions/checkout@v3
-
-      - name: Install Nix with flakes support
-        uses: cachix/install-nix-action@v18
-        with:
-          extra_nix_config: |
-            substituters = https://cache.nixos.org https://tricktron.cachix.org
-            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-            allowed-users = *
-            accept-flake-config = true
-            sandbox = relaxed
-
-      - name: Use Cachix to pull and push binary cache
-        uses: cachix/cachix-action@v11
-        with:
-          name     : tricktron
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       
-      - name: Build oasis QEMU initramfs
-        run : nix build .#oasis-qemu-initrd
+      - name: Setup QEMU rootfs
+        run : |
+          curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
+          curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/etc.tar
+          tar -xvf rootfs.tar
+          mkdir etc && tar -C etc -xvf etc.tar
+          cp -r etc out/root.git
 
-      - name: Upload initramfs
-        run: echo "UPLOAD_PATH=$(readlink -f result)" >> $GITHUB_ENV
-      - uses: actions/upload-artifact@v3
+      - name: Prepare chroot
+        run : |
+          mkdir out/root.git/dev && sudo mount -o bind /dev out/root.git/dev
+          chown -R root:root out/root.git
+      
+      - name: Execute chroot
+        run : |
+          sudo chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
+          /libexec/applyperms
+          /libexec/applyperms -d /etc
+          exit
+      - name: Create initramfs
+        run : |
+          sudo chmod +r out/root.git/etc/doas.config
+          cd out/root.git && find . | cpio --quiet -H newc -o | gzip -9 -n > ../initrd.img
+
+      - name: Upload initramfs artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: oasis-initramfs.img
-          path: ${{ env.UPLOAD_PATH }}
+          name: initrd.img
+          path: initrd.img
   build-kernel:
     name   : Build Oasis QEMU kernel
     if: ${{ false }}  # disable for now
