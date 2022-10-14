@@ -60,7 +60,7 @@
                 tar -xvf rootfs.tar
                 mkdir etc && tar -C etc -xvf etc.tar
                 cp -r etc out/root.git
-                mount -o bind /dev out/root.git/dev
+                mkdir out/root.git/dev && mount -o bind /dev out/root.git/dev
                 chown -R root:root out/root.git
                 chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
                 /libexec/applyperms
