@@ -26,6 +26,7 @@ jobs:
             trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
             allowed-users = *
             accept-flake-config = true
+            sandbox = relaxed
 
       - name: Use Cachix to pull and push binary cache
         uses: cachix/cachix-action@v11
