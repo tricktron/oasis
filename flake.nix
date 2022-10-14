@@ -61,13 +61,13 @@
                 mkdir etc && tar -C etc -xvf etc.tar
                 cp -r etc out/root.git
                 mkdir out/root.git/dev
-                mknod -m 622 /dev/console c 5 1
-                mknod -m 666 /dev/null c 1 3
-                mknod -m 666 /dev/zero c 1 5
-                mknod -m 666 /dev/ptmx c 5 2
-                mknod -m 666 /dev/tty c 5 0
-                mknod -m 444 /dev/random c 1 8
-                mknod -m 444 /dev/urandom c 1 9
+                mknod -m 622 out/root.git/dev/console c 5 1
+                mknod -m 666 out/root.git/dev/null c 1 3
+                mknod -m 666 out/root.git/dev/zero c 1 5
+                mknod -m 666 out/root.git/dev/ptmx c 5 2
+                mknod -m 666 out/root.git/dev/tty c 5 0
+                mknod -m 444 out/root.git/dev/random c 1 8
+                mknod -m 444 out/root.git/dev/urandom c 1 9
                 chown -R root:root out/root.git
                 chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
                 /libexec/applyperms

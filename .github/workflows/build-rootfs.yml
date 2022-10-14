@@ -45,6 +45,7 @@ jobs:
           path: ${{ env.UPLOAD_PATH }}
   build-kernel:
     name   : Build Oasis QEMU kernel
+    if: ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
