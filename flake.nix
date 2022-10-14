@@ -51,7 +51,8 @@
             packages.oasis-qemu-initrd = pkgs.runCommand "build-rootfs"
             {
                 __noChroot        = true;
-                nativeBuildInputs = with pkgs; [ curl coreutils cpio sudo ];
+                nativeBuildInputs = with pkgs; [ curl coreutils cpio sudo cacert ];
+                SSL_CERT_FILE     = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
             }
             ''
                 curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
