@@ -35,17 +35,12 @@ jobs:
       
       - name: Build oasis QEMU kernel
         run : nix build .#oasis-qemu-kernel
-      
-      - name: Tar kernel
-        run : |
-          cd result
-          tar -cvf oasis-5_15.tar .
 
       - name: Upload kernel
         uses: actions/upload-artifact@v3
         with:
           name: oasis-5_15
-          path: oasis-5_15.tar
+          path: result
 
   build-rootfs:
     name: Build Rootfs x86_64
