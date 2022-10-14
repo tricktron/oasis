@@ -51,7 +51,7 @@
             packages.oasis-qemu-initrd = pkgs.runCommand "build-rootfs"
             {
                 __noChroot        = true;
-                nativeBuildInputs = with pkgs; [ curl coreutils mount cpio ];
+                nativeBuildInputs = with pkgs; [ curl coreutils mount cpio  ];
                 SSL_CERT_FILE     = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
             }
             ''
@@ -60,7 +60,14 @@
                 tar -xvf rootfs.tar
                 mkdir etc && tar -C etc -xvf etc.tar
                 cp -r etc out/root.git
-                mkdir out/root.git/dev && mount -o bind /dev out/root.git/dev
+                mkdir out/root.git/dev
+                mknod -m 622 /dev/console c 5 1
+                mknod -m 666 /dev/null c 1 3
+                mknod -m 666 /dev/zero c 1 5
+                mknod -m 666 /dev/ptmx c 5 2
+                mknod -m 666 /dev/tty c 5 0
+                mknod -m 444 /dev/random c 1 8
+                mknod -m 444 /dev/urandom c 1 9
                 chown -R root:root out/root.git
                 chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
                 /libexec/applyperms
