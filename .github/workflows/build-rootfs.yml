@@ -29,10 +29,11 @@ jobs:
       - name: Setup root & oasis user
         run : |
           sudo chown -R root:root out/root.git
-          cd out/root.git && sudo libexec/applyperms
-          cd out/root.git && sudo libexec/applyperms -d etc
-          mkdir out/root.git/home/oasis
-          sudo chown -R 1000:1000 out/root.git/home/oasis
+          cd out/root.git
+          sudo libexec/applyperms
+          sudo libexec/applyperms -d etc
+          mkdir home/oasis
+          sudo chown -R 1000:1000 home/oasis
       
       - name: Create initramfs
         run : |
