@@ -11,6 +11,37 @@ env:
   FORCE_COLOR: 2
 
 jobs:
+  build-initramfs:
+    name   : Build Oasis Initramfs
+    runs-on: ubuntu-22.04
+    steps  :
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix with flakes support
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: |
+            substituters = https://cache.nixos.org https://tricktron.cachix.org
+            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+            allowed-users = *
+            accept-flake-config = true
+
+      - name: Use Cachix to pull and push binary cache
+        uses: cachix/cachix-action@v11
+        with:
+          name     : tricktron
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      
+      - name: Build oasis QEMU initramfs
+        run : nix build .#oasis-qemu-initrd
+
+      - name: Upload initramfs
+        run: echo "UPLOAD_PATH=$(readlink -f result)" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v3
+        with:
+          name: oasis-initramfs.img
+          path: ${{ env.UPLOAD_PATH }}
   build-kernel:
     name   : Build Oasis QEMU kernel
     runs-on: ubuntu-22.04
@@ -35,7 +66,6 @@ jobs:
       
       - name: Build oasis QEMU kernel
         run : nix build .#oasis-qemu-kernel
-
 
       - name: Upload kernel
         run: echo "UPLOAD_PATH=$(readlink -f result)" >> $GITHUB_ENV
