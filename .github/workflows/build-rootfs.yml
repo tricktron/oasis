@@ -26,13 +26,14 @@ jobs:
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
 
-      - name: Prepare chroot
+      - name: Setup root & oasis user
         run : |
-          mkdir out/root.git/dev && sudo mount -o bind /dev out/root.git/dev
           sudo chown -R root:root out/root.git
+          out/root.git/libexec/applyperms
+          out/root.git/libexec/applyperms -d /etc
+          mkdir out/root.git/home/oasis
+          sudo chown -R 1000:1000 out/root.git/home/oasis
       
-      - name: Execute chroot
-        run : sudo chroot out/root.git env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l && /libexec/applyperms && /libexec/applyperms -d /etc
       - name: Create initramfs
         run : |
           sudo chmod +r out/root.git/etc/doas.config
@@ -43,6 +44,7 @@ jobs:
         with:
           name: initrd.img
           path: initrd.img
+        
   build-kernel:
     name   : Build Oasis QEMU kernel
     if: ${{ false }}  # disable for now
