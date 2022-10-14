@@ -36,16 +36,11 @@ jobs:
       - name: Build oasis QEMU kernel
         run : nix build .#oasis-qemu-kernel
 
-      - name: Debug
-        run : |
-          ls -lh
-          ls -lh result
-
       - name: Upload kernel
         uses: actions/upload-artifact@v3
         with:
           name: oasis-5_15
-          path: result
+          path: result/
 
   build-rootfs:
     name: Build Rootfs x86_64
