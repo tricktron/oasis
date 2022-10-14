@@ -48,6 +48,22 @@
                 };
             });
 
+            packages.oasis-qemu-initrd = pkgs.runCommand "build-rootfs"
+            {
+                __noChroot = true;
+                nativeBuildInputs = with pkgs; [ curl ];
+                buildInputs = [];
+
+
+
+            }
+            ''
+                curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
+                curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/etc.tar
+                tar -xvf rootfs.tar
+                tar -xvf etc.tar etc    
+            '';
+
             packages.oasis-qemu-kernel = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;

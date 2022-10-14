@@ -37,7 +37,9 @@ jobs:
         run : nix build .#oasis-qemu-kernel
       
       - name: Tar kernel
-        run : tar -cvf oasis-5_15.tar result
+        run : |
+          cd result
+          tar -cvf oasis-5_15.tar .
 
       - name: Upload kernel
         uses: actions/upload-artifact@v3

@@ -4,3 +4,5 @@
 fetch
 local.ninja
 .*.swp
+rootfs.tar
+etc.tar
