@@ -51,7 +51,7 @@
             packages.oasis-qemu-initrd = pkgs.runCommand "build-rootfs"
             {
                 __noChroot        = true;
-                nativeBuildInputs = with pkgs; [ curl coreutils cpio sudo cacert ];
+                nativeBuildInputs = with pkgs; [ curl coreutils cpio ];
                 SSL_CERT_FILE     = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
             }
             ''
@@ -60,12 +60,12 @@
                 tar -xvf rootfs.tar
                 mkdir etc && tar -C etc -xvf etc.tar
                 cp -r etc out/root.git
-                sudo mount -o bind /dev out/root.git/dev
-                sudo chown -R root:root out/root.git
-                sudo chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
+                mount -o bind /dev out/root.git/dev
+                chown -R root:root out/root.git
+                chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
                 /libexec/applyperms
                 /libexec/applyperms -d /etc
-                sudo chmod +r out/root.git/etc/doas.config
+                chmod +r out/root.git/etc/doas.config
                 mkdir $out
                 cd out/root.git && find . | cpio --quiet -H newc -o | gzip -9 -n > $out/initrd.img
             '';
