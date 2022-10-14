@@ -30,7 +30,7 @@ jobs:
         run : |
           sudo chown -R root:root out/root.git
           out/root.git/libexec/applyperms
-          out/root.git/libexec/applyperms -d /etc
+          out/root.git/libexec/applyperms -d out/root.git/etc
           mkdir out/root.git/home/oasis
           sudo chown -R 1000:1000 out/root.git/home/oasis
       
