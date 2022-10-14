@@ -51,7 +51,7 @@
             packages.oasis-qemu-initrd = pkgs.runCommand "build-rootfs"
             {
                 __noChroot        = true;
-                nativeBuildInputs = with pkgs; [ curl coreutils cpio ];
+                nativeBuildInputs = with pkgs; [ curl coreutils mount cpio ];
                 SSL_CERT_FILE     = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
             }
             ''
