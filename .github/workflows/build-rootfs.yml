@@ -33,7 +33,7 @@ jobs:
       
       - name: Execute chroot
         run : |
-          sudo chroot /bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
+          sudo chroot /usr/bin/env -i PATH=/bin HOME=/root TERM="$TERM" PS1='(oasis chroot) \u:\w\$ ' /bin/ksh -l
           /libexec/applyperms
           /libexec/applyperms -d /etc
           exit
