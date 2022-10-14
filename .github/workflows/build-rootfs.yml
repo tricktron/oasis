@@ -44,8 +44,8 @@ jobs:
       - name: Upload initramfs artifact
         uses: actions/upload-artifact@v3
         with:
-          name: initrd.img
-          path: initrd.img
+          name: initrd.cpio
+          path: initrd.cpio
         
   build-kernel:
     name   : Build Oasis QEMU kernel
