@@ -39,7 +39,7 @@ jobs:
         run : |
           sudo chmod +r out/root.git/etc/doas.conf
           sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | cpio --quiet -H newc -o | gzip -9 -n > ../../initrd.img
+          cd out/root.git && sudo find . | cpio --quiet -H newc -o ../../initrd.cpio
 
       - name: Upload initramfs artifact
         uses: actions/upload-artifact@v3
