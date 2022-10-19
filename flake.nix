@@ -77,6 +77,18 @@
                 cd out/root.git && find . | cpio --quiet -H newc -o | gzip -9 -n > $out/initrd.img
             '';
 
+            packages.oasis-qemu-kernel-initrd = 
+                let 
+                    base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;
+                    oasis-kernel = pkgs.linuxPackages_custom
+                    {
+                        inherit (base_kernel) src;
+                        version = "${base_kernel.version}";
+                        configfile = ./oasis-qemu-initrd.config;
+                        allowImportFromDerivation = true;
+                    };
+                in oasis-kernel.kernel;
+            
             packages.oasis-qemu-kernel = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;

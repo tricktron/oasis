@@ -13,6 +13,7 @@ env:
 jobs:
   build-initramfs:
     name   : Build Oasis Initramfs
+    if     : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -49,7 +50,6 @@ jobs:
         
   build-kernel:
     name   : Build Oasis QEMU kernel
-    if: ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
