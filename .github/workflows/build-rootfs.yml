@@ -71,7 +71,7 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       
       - name: Build oasis QEMU kernel
-        run : nix build .#oasis-qemu-kernel
+        run : nix build .#oasis-qemu-kernel-initrd
 
       - name: Upload kernel
         run: echo "UPLOAD_PATH=$(readlink -f result)" >> $GITHUB_ENV
