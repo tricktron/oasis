@@ -171,9 +171,21 @@
                 ];
             };
 
-            devShells.default = pkgs-host.mkShell 
+            devShells =
             {
-                nativeBuildInputs = oasis-deps;
+                default   = pkgs-host.mkShell 
+                {
+                    nativeBuildInputs = oasis-deps;
+                };
+
+                grub2_bios = pkgs.mkShell
+                {
+                    buildInputs = with pkgs;
+                    [
+                        grub2
+                        xorriso
+                    ];
+                };
             };
         }
     );
