@@ -95,6 +95,7 @@ jobs:
 
   build-zen-initramfs:
     name   : Build zen initramfs
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -212,7 +213,6 @@ jobs:
 
   build-zen-kernel:
     name   : Build zen kernel
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
