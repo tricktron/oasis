@@ -213,6 +213,7 @@ jobs:
 
   build-zen-kernel:
     name   : Build zen kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -233,7 +234,7 @@ jobs:
           name     : tricktron
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       
-      - name: Build oasis QEMU kernel
+      - name: Build oasis zen kernel
         run : nix build .#oasis-zen-kernel
 
       - name: Upload kernel
@@ -245,7 +246,6 @@ jobs:
 
   build-oasis-kernel:
     name   : Build oasis kernel
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository

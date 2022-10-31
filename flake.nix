@@ -40,7 +40,16 @@
                         ignoreConfigErrors = true;
                     }
                 );
-                oasis-kernel             = pkgs.linux;
+                
+                oasis-kernel             = pkgs.linux.override
+                (
+                    {
+                        autoModules        = false; 
+                        preferBuiltin      = true;
+                        ignoreConfigErrors = true;
+                    }
+                    
+                );
             
                 oasis-qemu-kernel-initrd = 
                 let 
