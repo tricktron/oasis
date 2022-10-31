@@ -73,6 +73,15 @@
                         xorriso
                     ];
                 };
+
+                grub2_efi = pkgs.mkShell
+                {
+                    buildInputs = with pkgs;
+                    [
+                        grub2_efi
+                        xorriso
+                    ];
+                };
             };
         }
     );
