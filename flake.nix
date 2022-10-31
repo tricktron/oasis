@@ -35,8 +35,9 @@
                 oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen.override
                 (
                     {
-                        autoModules   = false; 
-                        preferBuiltin = true;
+                        autoModules        = false; 
+                        preferBuiltin      = true;
+                        ignoreConfigErrors = true;
                     }
                 );
                 oasis-kernel             = pkgs.linux;
