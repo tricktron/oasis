@@ -167,7 +167,7 @@ jobs:
           }
           EOF
 
-      - name: Build oasis grub bios iso
+      - name: Build oasis zen grub efi iso
         run : nix develop .#grub2_efi -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-zen-efi.iso oasis-iso
       
       - name: Upload oasis iso artifact
