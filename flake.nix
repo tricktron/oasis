@@ -32,7 +32,8 @@
         {
             packages = 
             {
-                oasis-zen-kernel         = (pkgs.linuxKernel.kernels.linux_zen.override { version = "5.15"; });
+                oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen;
+                oasis-kernel             = pkgs.linux;
                 oasis-qemu-kernel-initrd = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;
@@ -80,6 +81,7 @@
                     [
                         grub2_efi
                         xorriso
+                        mtools
                     ];
                 };
             };
