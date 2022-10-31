@@ -36,7 +36,10 @@
                 (
                     pkgs.linuxKernel.kernels.linux_zen.override
                     {
-                        structuredExtraConfig = with pkgs.lib.kernel; { MODULES = no; };
+                        extraConfig =
+                        ''
+                            MODULES n;
+                        '';
                     }
                 );
 
@@ -44,7 +47,10 @@
                 (
                     pkgs.linux.override
                     {
-                        structuredExtraConfig = with pkgs.lib.kernel; { MODULES = no; };
+                        extraConfig =
+                        ''
+                            MODULES n;
+                        '';
                     }
                 );
                 
