@@ -32,7 +32,12 @@
         {
             packages = 
             {
-                oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen;
+                oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen.override
+                (
+                    {
+                        argsOverride = { autoModules = true; };
+                    }
+                );
                 oasis-kernel             = pkgs.linux;
             
                 oasis-qemu-kernel-initrd = 
