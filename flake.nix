@@ -32,7 +32,7 @@
         {
             packages = 
             {
-                oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen.override
+                oasis-zen-kernel         = pkgs-host.linuxKernel.kernels.linux_zen.override
                 (
                     {
                         autoModules        = false; 
@@ -40,8 +40,8 @@
                         ignoreConfigErrors = true;
                     }
                 );
-                
-                oasis-kernel             = pkgs.linux.override
+
+                oasis-kernel             = pkgs-host.linux.override
                 (
                     {
                         autoModules        = false; 
