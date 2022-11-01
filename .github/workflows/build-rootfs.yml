@@ -255,7 +255,7 @@ jobs:
           EOF
 
       - name: Build oasis 5_15 grub efi iso
-        run : nix develop .#grub2_efi -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-zen-efi.iso oasis-iso
+        run : nix develop .#grub2_efi -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-5_15-efi.iso oasis-iso
       
       - name: Upload oasis iso artifact
         uses: actions/upload-artifact@v3
