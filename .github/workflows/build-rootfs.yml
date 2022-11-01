@@ -95,7 +95,6 @@ jobs:
 
   build-zen-initramfs:
     name   : Build zen initramfs
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -180,7 +179,6 @@ jobs:
 
   build-oasis-5_15-initramfs:
     name   : Build oasis 5_15 initramfs
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -298,6 +296,7 @@ jobs:
 
   build-zen-kernel:
     name   : Build zen kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -330,6 +329,7 @@ jobs:
 
   build-oasis-kernel:
     name   : Build oasis kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
