@@ -36,22 +36,14 @@
                 (
                     pkgs.linuxKernel.kernels.linux_zen.override
                     {
-                        DEBUG = 1;
-                        extraConfig =
-                        ''
-                            ACPI_CONTAINER m
-                        '';
+                        preferBuiltin = true;
                     }
                 );
                 oasis-kernel             = 
                 (
                     pkgs.linux.override
                     {
-                        DEBUG = 1;
-                        extraConfig =
-                        ''
-                            ACPI_CONTAINER m
-                        '';
+                        preferBuiltin = true;
                     }
                 );
                 kmod                     = pkgs-host.pkgsStatic.kmod;
