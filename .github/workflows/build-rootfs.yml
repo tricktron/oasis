@@ -180,7 +180,6 @@ jobs:
 
   build-oasis-5_15-initramfs:
     name   : Build oasis 5_15 initramfs
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -196,6 +195,26 @@ jobs:
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
           cp -r oasis-kernel-5_15/lib/modules out/root.git/lib
+
+      - name: Install Nix with flakes support
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: |
+            substituters = https://cache.nixos.org https://tricktron.cachix.org
+            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+            allowed-users = *
+            accept-flake-config = true
+
+      - name: Use Cachix to pull and push binary cache
+        uses: cachix/cachix-action@v11
+        with:
+          name     : tricktron
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Install kmod
+        run : |
+          nix build .#kmod
+          cp -a result/bin/* out/root.git/bin
 
       - name: Setup root & oasis user
         run : |
@@ -218,21 +237,6 @@ jobs:
           name: oasis-initrd.cpio
           path: oasis-initrd.cpio
       
-      - name: Install Nix with flakes support
-        uses: cachix/install-nix-action@v18
-        with:
-          extra_nix_config: |
-            substituters = https://cache.nixos.org https://tricktron.cachix.org
-            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
-            allowed-users = *
-            accept-flake-config = true
-
-      - name: Use Cachix to pull and push binary cache
-        uses: cachix/cachix-action@v11
-        with:
-          name     : tricktron
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-
       - name: Create boot directory
         run : |
           mkdir -p oasis-iso/boot/grub
@@ -298,6 +302,7 @@ jobs:
 
   build-zen-kernel:
     name   : Build zen kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -330,6 +335,7 @@ jobs:
 
   build-oasis-kernel:
     name   : Build oasis kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
