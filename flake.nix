@@ -43,7 +43,11 @@
                 (
                     pkgs.linux.override
                     {
-                        preferBuiltin = true;
+                        structuredExtraConfig = with pkgs.lib.kernel;
+                        {
+                            ACPI_CONTAINER = pkgs.lib.mkForce module;
+                        };
+
                     }
                 );
                 kmod                     = pkgs-host.pkgsStatic.kmod;
