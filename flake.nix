@@ -32,21 +32,8 @@
         {
             packages = 
             {
-                oasis-zen-kernel         = 
-                (
-                    pkgs.linuxKernel.kernels.linux_zen.override
-                    {
-                        preferBuiltin = true;
-                    }
-                );
-                oasis-kernel             = 
-                (
-                    pkgs.linux.override
-                    {
-                        autoModules = true;
-                        preferBuiltin = true;
-                    }
-                );
+                oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen;
+                oasis-kernel             = pkgs.linux;
                 kmod                     = pkgs-host.pkgsStatic.kmod;
 
                 oasis-qemu-kernel-initrd = 
