@@ -36,20 +36,22 @@
                 (
                     pkgs.linuxKernel.kernels.linux_zen.override
                     {
-                        structuredExtraConfig = with pkgs.lib.kernel;
-                        {
-                            ACPI_CONTAINER = yes;
-                        };
+                        DEBUG = 1;
+                        extraConfig =
+                        ''
+                            ACPI_CONTAINER m
+                        '';
                     }
                 );
                 oasis-kernel             = 
                 (
                     pkgs.linux.override
                     {
-                        structuredExtraConfig = with pkgs.lib.kernel;
-                        {
-                            ACPI_CONTAINER = yes;
-                        };
+                        DEBUG = 1;
+                        extraConfig =
+                        ''
+                            ACPI_CONTAINER m
+                        '';
                     }
                 );
                 kmod                     = pkgs-host.pkgsStatic.kmod;
