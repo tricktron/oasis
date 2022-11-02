@@ -38,7 +38,7 @@
                     {
                         structuredExtraConfig = with pkgs.lib.kernel;
                         {
-                            ACPI_CONTAINER = module;
+                            ACPI_CONTAINER = yes;
                         };
                     }
                 );
@@ -48,7 +48,7 @@
                     {
                         structuredExtraConfig = with pkgs.lib.kernel;
                         {
-                            ACPI_CONTAINER = module;
+                            ACPI_CONTAINER = yes;
                         };
                     }
                 );
