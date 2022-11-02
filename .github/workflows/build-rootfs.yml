@@ -259,7 +259,7 @@ jobs:
           fi
 
           menuentry "Oasis, Linux 5.15" {
-            linux /boot/bzImage rdinit=/bin/sinit rootfstype=tmpfs console=tty0 net.ifnames=0
+            linux /boot/bzImage rdinit=/bin/sinit rootfstype=tmpfs console=tty0 net.ifnames=0 nomodeset
             initrd /boot/initrd.cpio
           }
           EOF
