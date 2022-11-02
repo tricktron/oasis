@@ -34,9 +34,9 @@
             {
                 oasis-zen-kernel         = 
                 (
-                    pkgs-host.linuxKernel.kernels.linux_zen.override
+                    pkgs.linuxKernel.kernels.linux_zen.override
                     {
-                        structuredExtraConfig = with pkgs-host.lib.kernel;
+                        structuredExtraConfig = with pkgs.lib.kernel;
                         {
                             ACPI_CONTAINER = module;
                         };
@@ -44,9 +44,9 @@
                 );
                 oasis-kernel             = 
                 (
-                    pkgs-host.linux.override
+                    pkgs.linux.override
                     {
-                        structuredExtraConfig = with pkgs-host.lib.kernel;
+                        structuredExtraConfig = with pkgs.lib.kernel;
                         {
                             ACPI_CONTAINER = module;
                         };
