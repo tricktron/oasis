@@ -180,7 +180,6 @@ jobs:
 
   build-oasis-5_15-initramfs:
     name   : Build oasis 5_15 initramfs
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -233,6 +232,7 @@ jobs:
           cd out/root.git && sudo find . | cpio --quiet -H newc -o > ../../oasis-initrd.cpio
 
       - name: Upload initramfs artifact
+        if  : ${{ false }}  # disable for now
         uses: actions/upload-artifact@v3
         with:
           name: oasis-initrd.cpio
