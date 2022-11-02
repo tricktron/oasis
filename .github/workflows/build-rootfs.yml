@@ -189,7 +189,7 @@ jobs:
       - name: Download oasis kernel
         uses: actions/download-artifact@v3
         with:
-          name: oasis-kernel
+          name: oasis-kernel.tar
       
       - name: Setup oasis rootfs
         run : |
@@ -365,11 +365,14 @@ jobs:
         run : nix build .#oasis-kernel
 
       - name: Upload kernel
-        run: echo "UPLOAD_PATH=$(readlink -f result)" >> $GITHUB_ENV
+        run: |
+          mkdir oasis-kernel
+          cp -ar result/* oasis-kernel
+          tar -cvf oasis-kernel.tar oasis-kernel
       - uses: actions/upload-artifact@v3
         with:
-          name: oasis-kernel
-          path: ${{ env.UPLOAD_PATH }}
+          name: oasis-kernel.tar
+          path: oasis-kernel.tar
 
   build-rootfs:
     name: Build Rootfs x86_64
