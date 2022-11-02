@@ -32,10 +32,28 @@
         {
             packages = 
             {
-                oasis-zen-kernel         = pkgs-host.linuxKernel.kernels.linux_zen;
-                oasis-kernel             = pkgs-host.linux;
+                oasis-zen-kernel         = 
+                (
+                    pkgs-host.linuxKernel.kernels.linux_zen.override
+                    {
+                        structuredExtraConfig = with pkgs-host.lib.kernel;
+                        {
+                            ACPI_CONTAINER = module;
+                        };
+                    }
+                );
+                oasis-kernel             = 
+                (
+                    pkgs-host.linux.override
+                    {
+                        structuredExtraConfig = with pkgs-host.lib.kernel;
+                        {
+                            ACPI_CONTAINER = module;
+                        };
+                    }
+                );
                 kmod                     = pkgs-host.pkgsStatic.kmod;
-                
+
                 oasis-qemu-kernel-initrd = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;
