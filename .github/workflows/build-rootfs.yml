@@ -199,7 +199,7 @@ jobs:
           tar -xvf oasis-kernel.tar 
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
-          cp -r oasis-kernel/lib/modules out/root.git/lib
+          cp -r oasis-kernel/lib/* out/root.git/lib
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
