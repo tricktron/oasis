@@ -367,7 +367,7 @@ jobs:
       - name: Upload kernel
         run: |
           mkdir oasis-kernel
-          cp -ar result/* oasis-kernel
+          cp -Lr result/* oasis-kernel
           tar -cvf oasis-kernel.tar oasis-kernel
       - uses: actions/upload-artifact@v3
         with:
