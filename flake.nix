@@ -36,7 +36,7 @@
                 oasis-kernel             = pkgs.symlinkJoin 
                 {
                     name  = "oasis-kernel";
-                    paths = with pkgs; [ linux linux-firmware wireless-regdb ]; 
+                    paths = with pkgs; [ linux linux-firmware alsa-firmware wireless-regdb ]; 
                 };
                 kmod                     = pkgs-host.pkgsStatic.kmod;
 
