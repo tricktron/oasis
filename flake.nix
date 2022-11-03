@@ -33,7 +33,14 @@
             packages = 
             {
                 oasis-zen-kernel         = pkgs.linuxKernel.kernels.linux_zen;
-                oasis-kernel             = pkgs.linux;
+                oasis-kernel             = 
+                (
+                    pkgs.linux.override
+                    {
+                        structuredExtraConfig = with pkgs.lib.kernel; 
+                        {  FW_LOADER = yes; };
+                    }
+                );
                 kmod                     = pkgs-host.pkgsStatic.kmod;
 
                 oasis-qemu-kernel-initrd = 
