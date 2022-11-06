@@ -6,7 +6,7 @@
         extra-trusted-public-keys = 
         [ "tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w=" ];
     };
-    inputs.nixpkgs.url      = "github:NixOS/nixpkgs/release-22.05";
+    inputs.nixpkgs.url      = "github:NixOS/nixpkgs";
     inputs.flake-utils.url  = "github:numtide/flake-utils";
 
     outputs                 = { self, nixpkgs, flake-utils }:
@@ -36,7 +36,7 @@
                 oasis-kernel             = pkgs.symlinkJoin 
                 {
                     name  = "oasis-kernel";
-                    paths = with pkgs; [ linux linux-firmware alsa-firmware wireless-regdb ]; 
+                    paths = with pkgs; [ linuxKernel.kernels.linux_6_0 linux-firmware alsa-firmware wireless-regdb ]; 
                 };
                 kmod                     = pkgs-host.pkgsStatic.kmod;
 
