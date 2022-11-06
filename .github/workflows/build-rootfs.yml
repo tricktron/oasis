@@ -178,8 +178,8 @@ jobs:
           name: oasis-zen-efi.iso
           path: oasis-zen-efi.iso
 
-  build-oasis-5_15-initramfs:
-    name   : Build oasis 5_15 initramfs
+  build-oasis-initramfs:
+    name   : Build oasis initramfs
     runs-on: ubuntu-22.04
     needs  : build-oasis-kernel
     steps  :
@@ -189,7 +189,7 @@ jobs:
       - name: Download oasis kernel
         uses: actions/download-artifact@v3
         with:
-          name: oasis-kernel.tar
+          name: oasis-kernel.tar.xz
       
       - name: Setup oasis rootfs
         run : |
@@ -234,19 +234,19 @@ jobs:
         run : |
           sudo chmod +r out/root.git/etc/doas.conf
           sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | cpio --quiet -H newc -o > ../../oasis-initrd.cpio
+          cd out/root.git && sudo find . | cpio --quiet -H newc -o | zstd -19 > ../../oasis-initrd.cpio.zst
 
       - name: Upload initramfs artifact
         if  : ${{ false }}  # disable for now
         uses: actions/upload-artifact@v3
         with:
-          name: oasis-initrd.cpio
-          path: oasis-initrd.cpio
+          name: oasis-initrd.cpio.zst
+          path: oasis-initrd.cpio.zst
       
       - name: Create boot directory
         run : |
           mkdir -p oasis-iso/boot/grub
-          cp oasis-initrd.cpio oasis-iso/boot/initrd.cpio
+          cp oasis-initrd.cpio.zst oasis-iso/boot/initrd.cpio.zst
           cp oasis-kernel/bzImage oasis-iso/boot/bzImage
           cp oasis-kernel/System.map oasis-iso/boot
           cat > oasis-iso/boot/grub/grub.cfg << EOF
@@ -258,20 +258,20 @@ jobs:
             terminal_output gfxterm
           fi
 
-          menuentry "Oasis, Linux 5.15" {
+          menuentry "Oasis, Linux" {
             linux /boot/bzImage rdinit=/bin/sinit rootfstype=tmpfs
-            initrd /boot/initrd.cpio
+            initrd /boot/initrd.cpio.zst
           }
           EOF
 
-      - name: Build oasis 5_15 grub efi iso
-        run : nix develop .#grub2_efi -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-5_15-efi.iso oasis-iso
+      - name: Build oasis grub efi iso
+        run : nix develop .#grub2_efi -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-efi.iso oasis-iso
       
       - name: Upload oasis iso artifact
         uses: actions/upload-artifact@v3
         with:
-          name: oasis-5_15-efi.iso
-          path: oasis-5_15-efi.iso
+          name: oasis-efi.iso
+          path: oasis-efi.iso
         
   build-qemu-kernel:
     name   : Build Oasis QEMU kernel
@@ -368,11 +368,11 @@ jobs:
         run: |
           mkdir oasis-kernel
           cp -Lr result/* oasis-kernel
-          tar -cvf oasis-kernel.tar oasis-kernel
+          tar -cJf oasis-kernel.tar.xz oasis-kernel
       - uses: actions/upload-artifact@v3
         with:
-          name: oasis-kernel.tar
-          path: oasis-kernel.tar
+          name: oasis-kernel.tar.xz
+          path: oasis-kernel.tar.xz
 
   build-rootfs:
     name: Build Rootfs x86_64
