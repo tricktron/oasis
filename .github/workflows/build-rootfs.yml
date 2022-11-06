@@ -181,22 +181,23 @@ jobs:
   build-oasis-initramfs:
     name   : Build oasis initramfs
     runs-on: ubuntu-22.04
-    needs  : build-oasis-kernel
+    #needs  : build-oasis-kernel
     steps  :
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: Download oasis kernel
-        uses: actions/download-artifact@v3
-        with:
-          name: oasis-kernel.tar.xz
+     # - name: Download oasis kernel
+     #   uses: actions/download-artifact@v3
+     #   with:
+     #     name: oasis-kernel.tar.xz
       
       - name: Setup oasis rootfs
         run : |
           curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
           curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/zen-etc.tar
+          curl -L -o oasis-kernel.tar.xz https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/oasis-kernel.tar.xz
           tar -xvf rootfs.tar
-          tar -xvf oasis-kernel.tar 
+          tar -xvf oasis-kernel.tar.xz 
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
           cp -r oasis-kernel/lib/* out/root.git/lib
@@ -341,6 +342,7 @@ jobs:
 
   build-oasis-kernel:
     name   : Build oasis kernel
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
