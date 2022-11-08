@@ -220,7 +220,7 @@ jobs:
       - name: Install kmod and bash
         run : |
           nix build .#extra-bin
-          cp -La result/bin/* out/root.git/bin
+          cp -Lr result/bin/* out/root.git/bin
 
       - name: Setup root & oasis user
         run : |
