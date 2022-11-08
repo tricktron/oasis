@@ -42,7 +42,9 @@
                         {
                            structuredExtraConfig = with pkgs.lib.kernel;
                            {
-                                ACPI_APEI = yes;
+                                ACPI_APEI                    = yes;
+                                PSTORE_ZSTD_COMPRESS         = yes;
+                                PSTORE_ZSTD_COMPRESS_DEFAULT = yes;
                            }; 
                         })
                         linux-firmware
