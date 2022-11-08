@@ -52,7 +52,15 @@
                         wireless-regdb
                     ]; 
                 };
-                kmod                     = pkgs-host.pkgsStatic.kmod;
+                extra-bin                = pkgs-host.pkgsStatic.symlinkJoin
+                {
+                    name = "extra-bin";
+                    paths = with pkgs-host.pkgsStatic;
+                    [
+                        kmod
+                        bashInteractive
+                    ];
+                };
 
                 oasis-qemu-kernel-initrd = 
                 let 

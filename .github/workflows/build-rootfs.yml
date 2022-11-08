@@ -217,10 +217,10 @@ jobs:
           name     : tricktron
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-      - name: Install kmod
+      - name: Install kmod and bash
         run : |
-          nix build .#kmod
-          cp -a result/bin/* out/root.git/bin
+          nix build .#extra-bin
+          cp -La result/bin/* out/root.git/bin
 
       - name: Setup root & oasis user
         run : |
