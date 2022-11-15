@@ -59,6 +59,7 @@
                     [
                         kmod
                         bashInteractive
+                        nix
                     ];
                 };
 
