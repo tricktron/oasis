@@ -93,6 +93,92 @@ jobs:
           name: oasis-bios.iso
           path: oasis-bios.iso
 
+  build-qemu-nix:
+    name   : Build Oasis Nix Qemu
+    runs-on: ubuntu-22.04
+    steps  :
+      - name: Clone repository
+        uses: actions/checkout@v3
+      
+      - name: Setup QEMU rootfs
+        run : |
+          curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
+          curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc.tar
+          tar -xvf rootfs.tar
+          mkdir etc && tar -C etc -xvf etc.tar
+          cp -r etc out/root.git
+
+      - name: Install Nix with flakes support
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: |
+            substituters = https://cache.nixos.org https://tricktron.cachix.org
+            trusted-public-keys = tricktron.cachix.org-1:N1aBeQuELyEAOgvizaDC/qqFltwv7N7oSMaNozyDz6w= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+            allowed-users = *
+            accept-flake-config = true
+
+      - name: Use Cachix to pull and push binary cache
+        uses: cachix/cachix-action@v11
+        with:
+          name     : tricktron
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Install extra packages not in oasis-root
+        run : |
+          nix build .#extra-bin
+          cp -Lr result/bin/* out/root.git/bin
+
+      - name: Setup root & oasis user
+        run : |
+          sudo chown -R root:root out/root.git
+          cd out/root.git
+          sudo libexec/applyperms
+          sudo libexec/applyperms -d etc
+          sudo mkdir home/oasis
+          sudo chown -R 1000:1000 home/oasis
+      
+      - name: Create initramfs
+        run : |
+          sudo chmod +r out/root.git/etc/doas.conf
+          sudo chmod +r out/root.git/etc/shadow
+          cd out/root.git && sudo find . | cpio --quiet -H newc -o > ../../initrd.cpio
+
+      - name: Upload initramfs artifact
+        if  : ${{ false }}  # disable for now
+        uses: actions/upload-artifact@v3
+        with:
+          name: initrd.cpio
+          path: initrd.cpio
+
+      - name: Create boot directory
+        run : |
+          mkdir -p oasis-iso/boot/grub
+          curl -L -o oasis-iso/boot/bzImage-initrd https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/bzImage-initrd
+          cp initrd.cpio oasis-iso/boot
+          cat > oasis-iso/boot/grub/grub.cfg << EOF
+          set default=0
+          set timeout=5
+          if loadfont /boot/grub/fonts/unicode.pf2; then
+            set gfxmode=auto
+            insmod all_video
+            terminal_output gfxterm
+          fi
+
+          menuentry "Oasis Nix, Linux 5.15" {
+            linux /boot/bzImage-initrd rdinit=/bin/sinit rootfstype=tmpfs console=tty0 net.ifnames=0
+            initrd /boot/initrd.cpio
+          }
+          EOF
+
+      - name: Build oasis grub bios iso
+        run : nix develop .#grub2_bios -c grub-mkrescue --xorriso=$(which xorriso) -o oasis-nix-bios.iso oasis-iso
+      
+      - name: Upload oasis iso artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: oasis-nix-bios.iso
+          path: oasis-nix-bios.iso
+
   build-zen-initramfs:
     name   : Build zen initramfs
     if  : ${{ false }}  # disable for now
@@ -180,6 +266,7 @@ jobs:
 
   build-oasis-initramfs:
     name   : Build oasis initramfs
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     # needs  : build-oasis-kernel
     steps  :
