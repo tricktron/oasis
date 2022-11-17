@@ -126,7 +126,8 @@ jobs:
       - name: Install extra packages not in oasis-root
         run : |
           nix build .#extra-bin
-          cp -Lr result/bin/* out/root.git/bin
+          cp -a result/bin/* out/root.git/bin
+          cp -L result/bin/nix out/root.git/tmp
 
       - name: Setup root & oasis user
         run : |

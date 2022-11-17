@@ -58,7 +58,6 @@
                     paths = with pkgs-host.pkgsStatic;
                     [
                         kmod
-                        bashInteractive
                         nix
                     ];
                 };
