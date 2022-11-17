@@ -71,7 +71,7 @@
                 let
                     getDepsPath = drv: map (outName: drv.${outName}) drv.meta.outputsToInstall;
                     nix         = pkgs-host.pkgsStatic.nix;
-                    closure     = pkgs.closureInfo { rootPaths = getDepsPath nix; };
+                    closure     = pkgs.closureInfo { rootPaths = nix; };
                 in  pkgs.runCommand "nix-${nix.version}.tar.xz" {} 
                 ''
                     mkdir package
