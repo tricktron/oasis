@@ -132,6 +132,7 @@ jobs:
         run : |
           nix build .#nixClosureInfo
           cp -Lr result/registration out/root.git/.reginfo
+          cp -Lr result/* out/root.git
 
       - name: Setup root & oasis user
         run : |
