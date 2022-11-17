@@ -127,7 +127,8 @@ jobs:
         run : |
           nix build .#extra-bin
           cp -a result/bin/* out/root.git/bin
-          cp -L result/bin/nix out/root.git/tmp
+          mkdir out/root.git/tmp
+          cp -L result/bin/nix out/root.git/tmp/nix
 
       - name: Setup root & oasis user
         run : |
