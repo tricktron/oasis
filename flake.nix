@@ -62,6 +62,11 @@
                     ];
                 };
 
+                nixClosureInfo           = pkgs-host.pkgsStatic.closureInfo
+                {
+                    rootPaths = pkgs-host.pkgsStatic.nix;
+                };
+
                 oasis-qemu-kernel-initrd = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;

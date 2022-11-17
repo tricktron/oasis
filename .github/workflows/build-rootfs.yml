@@ -126,10 +126,13 @@ jobs:
       - name: Install extra packages not in oasis-root
         run : |
           nix build .#extra-bin
-          cp -a result/bin/* out/root.git/bin
-          NIX_BIN_STORE_PATH=$(readlink -f result/bin/nix | xargs dirname)
-          mkdir -p out/root.git/$NIX_BIN_STORE_PATH
-          cp -L result/bin/nix out/root.git/$NIX_BIN_STORE_PATH
+          cp -Lr result/bin/* out/root.git/bin
+
+      - name: Copy Nix Closure Info
+        run : |
+          nix build .#nixClosureInfo
+          mkdir -p out/root.git/tmp
+          cp -L result/registration out/root.git/tmp/.reginfo
 
       - name: Setup root & oasis user
         run : |
