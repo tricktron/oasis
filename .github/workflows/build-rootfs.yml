@@ -131,8 +131,8 @@ jobs:
       - name: Copy Nix Closure Info
         run : |
           nix build .#nixClosureInfo
-          mkdir -p out/root.git/tmp
-          cp -Lr result/* out/root.git/tmp
+          ls result
+          cp -Lr result/registration out/root.git/registration
 
       - name: Setup root & oasis user
         run : |
