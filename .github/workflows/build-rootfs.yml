@@ -132,7 +132,7 @@ jobs:
         run : |
           nix build .#nixClosureInfo
           mkdir -p out/root.git/tmp
-          cp -L result/registration out/root.git/tmp/.reginfo
+          cp -Lr result/* out/root.git/tmp
 
       - name: Setup root & oasis user
         run : |
