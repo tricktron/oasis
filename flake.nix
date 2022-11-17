@@ -67,6 +67,26 @@
                     rootPaths = pkgs-host.pkgsStatic.nix;
                 };
 
+                bootstrapNix             = 
+                let
+                    getDepsPath = drv: map (outName: drv.${outName}) drv.meta.outputsToInstall;
+                    nix         = pkgs-host.pkgsStatic.nix;
+                    closure     = pkgs.closureInfo { rootPaths = getDepsPath nix; };
+                in  pkgs.runCommand "nix-${nix.version}.tar.xz" {} 
+                ''
+                    mkdir package
+                    cp ${closure}/registration package/reginfo
+                    chmod -R +w package
+                    dir=nix-${nix.version}
+                    tar cvJf $out \
+                      --absolute-names \
+                      --mode=u+rw,uga+r \
+                      --transform "s,$NIX_STORE,$dir/store,S" \
+                      --transform "s,package,$dir," \
+                      package \
+                      $(cat ${closure}/store-paths)
+                '';
+
                 oasis-qemu-kernel-initrd = 
                 let 
                     base_kernel  = pkgs.linuxKernel.kernels.linux_5_15;
