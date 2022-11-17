@@ -95,6 +95,7 @@ jobs:
 
   bootstrap-nix:
     name: Bootstrap Nix
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -128,7 +129,6 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -138,9 +138,14 @@ jobs:
         run : |
           curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
           curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc.tar
+          curl -L -o nix.tar.xz https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/nix-2.11.0.tar.xz
           tar -xvf rootfs.tar
+          tar -xvf nix.tar.xz
           mkdir etc && tar -C etc -xvf etc.tar
-          cp -r etc out/root.git 
+          cp -r etc out/root.git
+          mkdir out/root.git/nix
+          cp -r nix-*/store out/root.git/nix
+          cp nix-*/reginfo out/root.git/.reginfo
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -161,12 +166,6 @@ jobs:
         run : |
           nix build .#extra-bin
           cp -Lr result/bin/* out/root.git/bin
-
-      - name: Copy Nix Closure Info
-        run : |
-          nix build .#nixClosureInfo
-          cp -Lr result/registration out/root.git/.reginfo
-          cp -Lr result/* out/root.git
 
       - name: Setup root & oasis user
         run : |
