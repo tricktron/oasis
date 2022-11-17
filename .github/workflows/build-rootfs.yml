@@ -127,8 +127,9 @@ jobs:
         run : |
           nix build .#extra-bin
           cp -a result/bin/* out/root.git/bin
-          mkdir out/root.git/tmp
-          cp -L result/bin/nix out/root.git/tmp/nix
+          NIX_BIN_STORE_PATH=$(readlink -f result/bin/nix | xargs dirname)
+          mkdir -p out/root.git/$NIX_BIN_STORE_PATH
+          cp -L result/bin/nix out/root.git/$NIX_BIN_STORE_PATH
 
       - name: Setup root & oasis user
         run : |
