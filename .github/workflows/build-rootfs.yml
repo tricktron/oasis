@@ -175,7 +175,6 @@ jobs:
           cd out/root.git
           sudo libexec/applyperms
           sudo libexec/applyperms -d etc
-          sudo mkdir home/oasis
           sudo chown -R 1000:1000 home/oasis
       
       - name: Create initramfs
