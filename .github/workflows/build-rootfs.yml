@@ -373,7 +373,8 @@ jobs:
           cd out/root.git
           sudo libexec/applyperms
           sudo libexec/applyperms -d etc
-          sudo mkdir home/oasis
+          sudo mkdir -p home/oasis/.ssh
+          sudo echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > home/oasis/.ssh/authorized_keys 
           sudo chown -R 1000:1000 home/oasis
       
       - name: Create initramfs
