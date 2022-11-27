@@ -129,6 +129,7 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -147,7 +148,7 @@ jobs:
           cp -r nix-*/store out/root.git/nix
           cp nix-*/reginfo out/root.git/.reginfo
           mkdir -p out/root.git/home/oasis/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys 
+          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -320,7 +321,6 @@ jobs:
 
   build-oasis-nix-initramfs:
     name   : Build Oasis Nix initramfs
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     # needs  : build-oasis-kernel
     steps  :
