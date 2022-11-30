@@ -141,6 +141,9 @@ jobs:
           tar -xvf rootfs.tar
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc root.git
+          cd root.git
+          libexec/applyperms
+          libexec/applyperms -d etc
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -177,18 +180,17 @@ jobs:
           sudo mount -vt proc proc ./proc
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < .reginfo"
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
-          sudo chown -R root:root .
-          sudo chroot . /bin/ksh -c "libexec/applyperms"
-          sudo chroot . /bin/ksh -c "libexec/applyperms -d etc"
           sudo umount ./dev{/pts,}
           sudo umount ./proc
 
 
       - name: Setup oasis user & fix permissions
         run : |
-          sudo mkdir -p root.git/home/oasis/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > root.git/home/oasis/.ssh/authorized_keys
-          sudo chown -R 1000:1000 root.git/home/oasis
+          cd root.git
+          mkdir -p home/oasis/.ssh
+          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > home/oasis/.ssh/authorized_keys
+          sudo chown -R root:root .
+          sudo chown -R 1000:1000 home/oasis
           sudo chgrp 30000 nix/store
           sudo chmod 1775 nix/store
       
