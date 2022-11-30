@@ -171,7 +171,7 @@ jobs:
           cp nix-*/reginfo root.git/.reginfo
           cd root.git
           install -d -m 0755 nix/var nix/var/log nix/var/log/nix nix/var/log/nix/drvs nix/var/nix{,/db,/gcroots,/profiles,/temproots,/userpool,/daemon-socket} nix/var/nix/{gcroots,profiles}/per-user
-          echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > root/.nix-channels
+          mkdir root && echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > root/.nix-channels
           sudo mount -v --bind /dev ./dev
           sudo mount -v --bind /dev/pts ./dev/pts
           sudo mount -vt proc proc ./proc
