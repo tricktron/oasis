@@ -142,7 +142,7 @@ jobs:
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
           cd out/root.git
-          libexec/applyperms
+          libexec/applyperms -d .
           libexec/applyperms -d etc
 
       - name: Install Nix with flakes support
@@ -177,10 +177,11 @@ jobs:
           sudo chgrp 30000 nix/store
           sudo chmod 1775 nix/store
           echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > root/.nix-channels
+          sudo mount -vt proc proc ./proc
           echo "before loading db"
-          sudo nix/store/*nix*/bin/nix-store --init && sudo nix/store/*nix*/bin/nix-store --load-db < .reginfo
+          sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < .reginfo"
           echo "after loading db"
-          sudo nix/store/*nix*/bin/nix-env -i nix/store/*nix*
+          sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
 
       - name: Setup oasis user
         run : |
