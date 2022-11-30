@@ -177,6 +177,8 @@ jobs:
           sudo chgrp 30000 nix/store
           sudo chmod 1775 nix/store
           echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > root/.nix-channels
+          sudo mount -v --bind /dev ./dev
+          sudo mount -v --bind /dev/pts ./dev/pts
           sudo mount -vt proc proc ./proc
           echo "before loading db"
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < .reginfo"
