@@ -141,9 +141,6 @@ jobs:
           tar -xvf rootfs.tar
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc root.git
-          cd root.git
-          libexec/applyperms -d .
-          libexec/applyperms -d etc
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -174,23 +171,26 @@ jobs:
           cp nix-*/reginfo root.git/.reginfo
           cd root.git
           install -d -m 0755 nix/var nix/var/log nix/var/log/nix nix/var/log/nix/drvs nix/var/nix{,/db,/gcroots,/profiles,/temproots,/userpool,/daemon-socket} nix/var/nix/{gcroots,profiles}/per-user
-          sudo chgrp 30000 nix/store
-          sudo chmod 1775 nix/store
           echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > root/.nix-channels
           sudo mount -v --bind /dev ./dev
           sudo mount -v --bind /dev/pts ./dev/pts
           sudo mount -vt proc proc ./proc
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < .reginfo"
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
+          sudo chown -R root:root .
+          sudo chroot . /bin/ksh -c "libexec/applyperms"
+          sudo chroot . /bin/ksh -c "libexec/applyperms -d etc"
           sudo umount ./dev{/pts,}
           sudo umount ./proc
 
 
-      - name: Setup oasis user
+      - name: Setup oasis user & fix permissions
         run : |
-          mkdir -p root.git/home/oasis/.ssh
+          sudo mkdir -p root.git/home/oasis/.ssh
           echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > root.git/home/oasis/.ssh/authorized_keys
           sudo chown -R 1000:1000 root.git/home/oasis
+          sudo chgrp 30000 nix/store
+          sudo chmod 1775 nix/store
       
       - name: Create initramfs
         run : |
