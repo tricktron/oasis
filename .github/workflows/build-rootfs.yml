@@ -185,6 +185,11 @@ jobs:
           #echo "after loading db"
           #sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
           export NIX_STORE_DIR=$(pwd)/nix/store
+          export NIX_DATA_DIR=$(pwd)/nix/share
+          export NIX_LOG_DIR=$(pwd)/nix/var/log/nix
+          export NIX_STATE_DIR=$(pwd)/nix/var/nix
+          export NIX_CONF_DIR=$(pwd)/nix/etc/nix
+          NIX_PROFILES="$NIX_STATE_DIR/profiles/default $(pwd)/root/.nix-profile"
           nix/store/*nix*/bin/nix-store --load-db < .reginfo
           nix/store/*nix*/bin/nix-env -i nix/store/*nix*
 
