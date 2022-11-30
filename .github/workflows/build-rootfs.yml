@@ -25,12 +25,12 @@ jobs:
           curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/etc.tar
           tar -xvf rootfs.tar
           mkdir etc && tar -C etc -xvf etc.tar
-          cp -r etc out/root.git
+          cp -r etc root.git
 
       - name: Setup root & oasis user
         run : |
-          sudo chown -R root:root out/root.git
-          cd out/root.git
+          sudo chown -R root:root root.git
+          cd root.git
           sudo libexec/applyperms
           sudo libexec/applyperms -d etc
           sudo mkdir home/oasis
@@ -38,9 +38,9 @@ jobs:
       
       - name: Create initramfs
         run : |
-          sudo chmod +r out/root.git/etc/doas.conf
-          sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | cpio --quiet -H newc -o > ../../initrd.cpio
+          sudo chmod +r root.git/etc/doas.conf
+          sudo chmod +r root.git/etc/shadow
+          cd root.git && sudo find . | cpio --quiet -H newc -o > ../../initrd.cpio
 
       - name: Upload initramfs artifact
         if  : ${{ false }}  # disable for now
@@ -140,8 +140,8 @@ jobs:
           curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc-minimal.tar
           tar -xvf rootfs.tar
           mkdir etc && tar -C etc -xvf etc.tar
-          cp -r etc out/root.git
-          cd out/root.git
+          cp -r etc root.git
+          cd root.git
           libexec/applyperms -d .
           libexec/applyperms -d etc
 
@@ -163,16 +163,16 @@ jobs:
       - name: Install extra packages not in oasis-root
         run : |
           nix build .#extra-bin
-          cp -Lr result/bin/* out/root.git/bin
+          cp -Lr result/bin/* root.git/bin
 
       - name: Setup Nix
         run : |
           curl -L -o nix.tar.xz https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/nix-2.11.0.tar.xz
           tar -xvf nix.tar.xz
-          mkdir out/root.git/nix
-          cp -r nix-*/store out/root.git/nix
-          cp nix-*/reginfo out/root.git/.reginfo
-          cd out/root.git
+          mkdir root.git/nix
+          cp -r nix-*/store root.git/nix
+          cp nix-*/reginfo root.git/.reginfo
+          cd root.git
           install -d -m 0755 nix/var nix/var/log nix/var/log/nix nix/var/log/nix/drvs nix/var/nix{,/db,/gcroots,/profiles,/temproots,/userpool,/daemon-socket} nix/var/nix/{gcroots,profiles}/per-user
           sudo chgrp 30000 nix/store
           sudo chmod 1775 nix/store
@@ -188,15 +188,15 @@ jobs:
 
       - name: Setup oasis user
         run : |
-          mkdir -p out/root.git/home/oasis/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys
-          sudo chown -R 1000:1000 out/root.git/home/oasis
+          mkdir -p root.git/home/oasis/.ssh
+          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > root.git/home/oasis/.ssh/authorized_keys
+          sudo chown -R 1000:1000 root.git/home/oasis
       
       - name: Create initramfs
         run : |
-          sudo chmod +r out/root.git/etc/doas.conf
-          sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | sudo cpio --quiet -H newc -o > ../../initrd.cpio
+          sudo chmod +r root.git/etc/doas.conf
+          sudo chmod +r root.git/etc/shadow
+          cd root.git && sudo find . | sudo cpio --quiet -H newc -o > ../../initrd.cpio
 
       - name: Upload initramfs artifact
         if  : ${{ false }}  # disable for now
@@ -257,8 +257,8 @@ jobs:
           tar -xvf rootfs.tar
           tar -xvf oasis-kernel.tar.xz 
           mkdir etc && tar -C etc -xvf etc.tar
-          cp -r etc out/root.git
-          cp -r oasis-kernel/lib/* out/root.git/lib
+          cp -r etc root.git
+          cp -r oasis-kernel/lib/* root.git/lib
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -278,12 +278,12 @@ jobs:
       - name: Install extra packages not in oasis-root
         run : |
           nix build .#extra-bin
-          cp -Lr result/bin/* out/root.git/bin
+          cp -Lr result/bin/* root.git/bin
 
       - name: Setup root & oasis user
         run : |
-          sudo chown -R root:root out/root.git
-          cd out/root.git
+          sudo chown -R root:root root.git
+          cd root.git
           sudo libexec/applyperms
           sudo libexec/applyperms -d etc
           sudo mkdir home/oasis
@@ -291,9 +291,9 @@ jobs:
       
       - name: Create initramfs
         run : |
-          sudo chmod +r out/root.git/etc/doas.conf
-          sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | cpio --quiet -H newc -o | zstd -19 > ../../oasis-initrd.cpio.zst
+          sudo chmod +r root.git/etc/doas.conf
+          sudo chmod +r root.git/etc/shadow
+          cd root.git && sudo find . | cpio --quiet -H newc -o | zstd -19 > ../../oasis-initrd.cpio.zst
 
       - name: Upload initramfs artifact
         if  : ${{ false }}  # disable for now
@@ -357,13 +357,13 @@ jobs:
           tar -xvf oasis-kernel.tar.xz
           tar -xvf nix.tar.xz
           mkdir etc && tar -C etc -xvf etc.tar
-          cp -r etc out/root.git
-          cp -r oasis-kernel/lib/* out/root.git/lib
-          mkdir out/root.git/nix
-          cp -r nix-*/store out/root.git/nix
-          cp nix-*/reginfo out/root.git/.reginfo
-          mkdir -p out/root.git/home/oasis/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys 
+          cp -r etc root.git
+          cp -r oasis-kernel/lib/* root.git/lib
+          mkdir root.git/nix
+          cp -r nix-*/store root.git/nix
+          cp nix-*/reginfo root.git/.reginfo
+          mkdir -p root.git/home/oasis/.ssh
+          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > root.git/home/oasis/.ssh/authorized_keys 
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -383,21 +383,21 @@ jobs:
       - name: Install extra packages not in oasis-root
         run : |
           nix build .#extra-bin
-          cp -Lr result/bin/* out/root.git/bin
+          cp -Lr result/bin/* root.git/bin
 
       - name: Setup root & oasis user
         run : |
-          sudo chown -R root:root out/root.git
-          cd out/root.git
+          sudo chown -R root:root root.git
+          cd root.git
           sudo libexec/applyperms
           sudo libexec/applyperms -d etc
           sudo chown -R 1000:1000 home/oasis
       
       - name: Create initramfs
         run : |
-          sudo chmod +r out/root.git/etc/doas.conf
-          sudo chmod +r out/root.git/etc/shadow
-          cd out/root.git && sudo find . | cpio --quiet -H newc -o | zstd -19 > ../../oasis-initrd.cpio.zst
+          sudo chmod +r root.git/etc/doas.conf
+          sudo chmod +r root.git/etc/shadow
+          cd root.git && sudo find . | cpio --quiet -H newc -o | zstd -19 > ../../oasis-initrd.cpio.zst
 
       - name: Upload initramfs artifact
         if  : ${{ false }}  # disable for now
