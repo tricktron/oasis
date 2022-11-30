@@ -182,6 +182,9 @@ jobs:
           sudo mount -vt proc proc ./proc
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < .reginfo"
           sudo chroot . /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
+          sudo umount ./dev{/pts,}
+          sudo umount ./proc
+
 
       - name: Setup oasis user
         run : |
