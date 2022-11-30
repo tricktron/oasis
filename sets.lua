@@ -7,6 +7,7 @@ return {
 		'cacert',
 		'curl',
 		'e2fsprogs',
+        'efibootmgr',
 		'git',
 		'hotplugd',
 		'iproute2',

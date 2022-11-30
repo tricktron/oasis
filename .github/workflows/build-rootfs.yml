@@ -129,6 +129,7 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -540,7 +541,6 @@ jobs:
 
   build-rootfs:
     name: Build Rootfs x86_64
-    if: ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
