@@ -129,7 +129,6 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -138,17 +137,13 @@ jobs:
       - name: Setup QEMU rootfs
         run : |
           curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
-          curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc.tar
-          curl -L -o nix.tar.xz https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/nix-2.11.0.tar.xz
+          curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc-minimal.tar
           tar -xvf rootfs.tar
-          tar -xvf nix.tar.xz
           mkdir etc && tar -C etc -xvf etc.tar
           cp -r etc out/root.git
-          mkdir out/root.git/nix
-          cp -r nix-*/store out/root.git/nix
-          cp nix-*/reginfo out/root.git/.reginfo
-          mkdir -p out/root.git/home/oasis/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys
+          cd out/root.git
+          libexec/applyperms
+          libexec/applyperms -d etc
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -170,13 +165,25 @@ jobs:
           nix build .#extra-bin
           cp -Lr result/bin/* out/root.git/bin
 
-      - name: Setup root & oasis user
+      - name: Setup Nix
         run : |
-          sudo chown -R root:root out/root.git
-          cd out/root.git
-          sudo libexec/applyperms
-          sudo libexec/applyperms -d etc
-          sudo chown -R 1000:1000 home/oasis
+          curl -L -o nix.tar.xz https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/nix-2.11.0.tar.xz
+          tar -xvf nix.tar.xz
+          mkdir out/root.git/nix
+          cp -r nix-*/store out/root.git/nix
+          cp nix-*/reginfo out/root.git/.reginfo
+          sudo chroot out/root.git /bin/ksh -c "install -d -m 0755 /nix/var /nix/var/log nix/var/log/nix /nix/var/log/nix/drvs /nix/var/nix{,/db,/gcroots,/profiles,/temproots,/userpool,/daemon-socket} /nix/var/nix/{gcroots,profiles}/per-user"
+          sudo chroot out/root.git /bin/ksh -c "chgrp 30000 /nix/store"
+          sudo chroot out/root.git /bin/ksh -c "chmod 1775 /nix/store"
+          sudo chroot out/root.git /bin/ksh -c "echo "https://nixos.org/channels/nixpkgs-unstable nixpkgs" > /root/.nix-channels"
+          sudo chroot out/root.git /bin/ksh -c "/nix/store/*nix*/bin/nix-store --load-db < /.reginfo"
+          sudo chroot out/root.git /bin/ksh -c "/nix/store/*nix*/bin/nix-env -i nix/store/*nix*"
+
+      - name: Setup oasis user
+        run : |
+          mkdir -p out/root.git/home/oasis/.ssh
+          sudo chown -R 1000:1000 out/root.git/home/oasis
+          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkek0lfgkNIyRu79bPIJrSUG28onve3F+Y/kFwwLK2t gurten" > out/root.git/home/oasis/.ssh/authorized_keys
       
       - name: Create initramfs
         run : |
@@ -321,6 +328,7 @@ jobs:
 
   build-oasis-nix-initramfs:
     name   : Build Oasis Nix initramfs
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     # needs  : build-oasis-kernel
     steps  :
