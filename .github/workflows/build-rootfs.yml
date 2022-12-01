@@ -547,9 +547,12 @@ jobs:
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
-        run: |
-          git clone -b f-oasis-with-root -c 'core.sharedRepository=group' https://github.com/tricktron/oasis.git root.git/src/oasis'
-          git init --template root.git/src/oasis/template
+        with:
+          ref: f-oasis-with-root
+          path: root.git/src/oasis
+
+      - name: Init Root Repo
+        run : cd root.git && git init --template src/oasis/template
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -568,7 +571,7 @@ jobs:
           extraPullNames: tricktron
 
       - name: Cache dev shell
-        run: nix develop
+        run: cd root.git/src/oasis && nix develop
 
       - name: Setup Git user to apply patches and commit
         run: |
@@ -577,8 +580,9 @@ jobs:
 
       - name: Build
         run: |
-          nix develop -c "cd root.git/src/oasis && lua setup.lua"
-          nix develop -c "cd root.git/src/oasis && samu commit"
+          cd root.git/src/oasis
+          nix develop -c lua setup.lua
+          nix develop -c samu commit
       
       - name: Tar rootfs
         run: tar -cvf rootfs-x86_64.tar root.git
