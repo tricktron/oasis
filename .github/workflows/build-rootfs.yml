@@ -2,7 +2,7 @@ name: Build Rootfs
 
 on:
   push:
-    branches: [ main, f-oasis-in-nix-shell ]
+    branches: [ main, f-oasis-with-root ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -548,7 +548,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v3
         run: |
-          git clone -b f-oasis-in-nix-shell -c 'core.sharedRepository=group' https://github.com/tricktron/oasis.git root.git/src/oasis'
+          git clone -b f-oasis-with-root -c 'core.sharedRepository=group' https://github.com/tricktron/oasis.git root.git/src/oasis'
           git init --template root.git/src/oasis/template
 
       - name: Install Nix with flakes support
