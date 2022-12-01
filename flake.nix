@@ -27,6 +27,7 @@
 		        wayland
 		        nasm
                 pax
+                libarchive
             ];
         in
         {
