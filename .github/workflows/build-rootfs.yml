@@ -129,7 +129,6 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -137,7 +136,7 @@ jobs:
       
       - name: Setup QEMU rootfs
         run : |
-          curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar
+          curl -L -o rootfs.tar https://github.com/tricktron/oasis/releases/download/v1.0.0-alpha/rootfs-x86_64.tar.xz
           curl -L -o etc.tar https://github.com/tricktron/oasis-etc/releases/download/v1.0.0-alpha/nix-etc-minimal.tar
           tar -xvf rootfs.tar
           mkdir etc && tar -C etc -xvf etc.tar
@@ -543,6 +542,7 @@ jobs:
 
   build-rootfs:
     name: Build Rootfs x86_64
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
