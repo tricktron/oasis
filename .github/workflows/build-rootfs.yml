@@ -129,6 +129,7 @@ jobs:
 
   build-qemu-nix:
     name   : Build Oasis Nix Qemu
+    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps  :
       - name: Clone repository
@@ -542,11 +543,13 @@ jobs:
 
   build-rootfs:
     name: Build Rootfs x86_64
-    if  : ${{ false }}  # disable for now
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
+        run: |
+          git clone -b f-oasis-in-nix-shell -c 'core.sharedRepository=group' https://github.com/tricktron/oasis.git root.git/src/oasis'
+          git init --template root.git/src/oasis/template
 
       - name: Install Nix with flakes support
         uses: cachix/install-nix-action@v18
@@ -569,19 +572,16 @@ jobs:
 
       - name: Setup Git user to apply patches and commit
         run: |
-          git config --global user.email oasis
-          git config --global user.name oasis
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
 
       - name: Build
         run: |
-          nix develop -c lua setup.lua 
-          nix develop -c samu commit
-      
-      - name: Checkout master to trigger Git hook to get all files
-        run: cd out/root.git && git checkout master
+          nix develop -c "cd root.git/src/oasis && lua setup.lua"
+          nix develop -c "cd root.git/src/oasis && samu commit"
       
       - name: Tar rootfs
-        run: tar -C out -cvf rootfs-x86_64.tar root.git
+        run: tar -cvf rootfs-x86_64.tar root.git
 
       - name: Upload rootfs artifact
         uses: actions/upload-artifact@v3

@@ -49,10 +49,10 @@ return {
 
 	-- output git repository
 	repo={
-		path='$builddir/root.git',
+		path='../..',
 		flags='',
 		tag='tree',
-		branch='master',
+		branch='oasis',
 	},
 
 	-- GPU driver (possible_values: amdgpu intel nouveau)
