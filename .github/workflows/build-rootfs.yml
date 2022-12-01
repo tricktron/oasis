@@ -583,15 +583,20 @@ jobs:
           cd root.git/src/oasis
           nix develop -c lua setup.lua
           nix develop -c samu commit
+
+      - name: Delete build dir and merge commit
+        run: |
+          sudo rm -rf root.git/src
+          cd root.git && git merge oasis
       
       - name: Tar rootfs
-        run: tar -cvf rootfs-x86_64.tar root.git
+        run: tar -cJf rootfs-x86_64.tar.xz root.git
 
       - name: Upload rootfs artifact
         uses: actions/upload-artifact@v3
         with:
-          name: rootfs-x86_64
-          path: rootfs-x86_64.tar
+          name: rootfs-x86_64.tar.xz
+          path: rootfs-x86_64.tar.xz
 
 
 
